@@ -11,8 +11,6 @@ class Opcion1Screen extends StatefulWidget {
 }
 
 class _Opcion1ScreenState extends State<Opcion1Screen> {
-  var isLoading = false;
-  TextEditingController txtEmailCon = TextEditingController();
   double montoConsumo = 0.0;
   double propina = 0.0;
   double total = 0.0;
@@ -20,14 +18,6 @@ class _Opcion1ScreenState extends State<Opcion1Screen> {
 
   @override
   Widget build(BuildContext context) {
-    TextFormField txtEmail = TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-          hintText: 'Consumo \$',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5)),
-    );
-
     TextFormField txtConsumo = TextFormField(
       controller: txtConsumoCont,
       keyboardType: TextInputType.number,
@@ -36,13 +26,15 @@ class _Opcion1ScreenState extends State<Opcion1Screen> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5)),
     );
-    ElevatedButton btnLogin = ElevatedButton(
+    ElevatedButton btnCalcular = ElevatedButton(
       style: ElevatedButton.styleFrom(primary: ColorSettings.colorButton),
       onPressed: () {
         //montoConsumo = double.tryParse());
         var input = txtConsumoCont.value.text;
 
-        if (input == '') {
+        if (input.isEmpty ||
+            double.tryParse(input) == null ||
+            double.tryParse(input) == 0.0) {
           showDialog(
               context: context,
               builder: (context) {
@@ -155,7 +147,7 @@ class _Opcion1ScreenState extends State<Opcion1Screen> {
                   SizedBox(
                     height: 5,
                   ),
-                  btnLogin
+                  btnCalcular
                 ],
               ),
             ),
