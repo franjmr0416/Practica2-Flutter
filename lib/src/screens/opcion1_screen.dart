@@ -29,7 +29,6 @@ class _Opcion1ScreenState extends State<Opcion1Screen> {
     ElevatedButton btnCalcular = ElevatedButton(
       style: ElevatedButton.styleFrom(primary: ColorSettings.colorButton),
       onPressed: () {
-        //montoConsumo = double.tryParse());
         var input = txtConsumoCont.value.text;
 
         if (input.isEmpty ||
