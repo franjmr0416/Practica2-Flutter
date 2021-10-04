@@ -23,6 +23,10 @@ class DashBoardScreen extends StatelessWidget {
                       'https://image.flaticon.com/icons/png/512/147/147144.png'),
                 ),
                 decoration: BoxDecoration(color: ColorSettings.colorPrimary),
+                onDetailsPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/profile');
+                },
               ),
               ListTile(
                 title: Text('Propinas'),
@@ -42,6 +46,26 @@ class DashBoardScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, '/intensiones');
+                },
+              ),
+              ListTile(
+                title: Text('Notas'),
+                subtitle: Text('CRUD Notas'),
+                leading: Icon(Icons.phone_android),
+                trailing: Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/notas');
+                },
+              ),
+              ListTile(
+                title: Text('Movies'),
+                subtitle: Text('Prueba API REST'),
+                leading: Icon(Icons.movie),
+                trailing: Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/movie');
                 },
               )
             ],
