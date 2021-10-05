@@ -19,9 +19,14 @@ class DashBoardScreen extends StatelessWidget {
                 accountName: Text('Morales Rico Francisco Javier'),
                 accountEmail: Text('17030659@itcelaya.edu.mx'),
                 currentAccountPicture: CircleAvatar(
-                  child: Image.network(
-                      'https://image.flaticon.com/icons/png/512/147/147144.png'),
-                ),
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.person,
+                      size: 40,
+                    )
+                    /*Image.network(
+                      'https://image.flaticon.com/icons/png/512/147/147144.png'),*/
+                    ),
                 decoration: BoxDecoration(color: ColorSettings.colorPrimary),
                 onDetailsPressed: () {
                   Navigator.pop(context);

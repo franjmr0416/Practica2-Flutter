@@ -5,6 +5,7 @@ class UserModel {
   String? aMaterno;
   String? email;
   String? telefono;
+  String? foto;
 
   UserModel(
       {this.id,
@@ -12,7 +13,8 @@ class UserModel {
       this.aPaterno,
       this.aMaterno,
       this.email,
-      this.telefono});
+      this.telefono,
+      this.foto});
 
   //Map -> Object
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -22,7 +24,8 @@ class UserModel {
         aPaterno: map['aPaterno'],
         aMaterno: map['aMaterno'],
         email: map['email'],
-        telefono: map['telefono']);
+        telefono: map['telefono'],
+        foto: map['foto']);
   }
   //Object -> Map
   Map<String, dynamic> toMap() {
@@ -32,7 +35,8 @@ class UserModel {
       'aPaterno': aPaterno,
       'aMaterno': aMaterno,
       'email': email,
-      'telefono': telefono
+      'telefono': telefono,
+      'foto': foto
     };
   }
 }

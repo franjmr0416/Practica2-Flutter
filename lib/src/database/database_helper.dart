@@ -28,7 +28,7 @@ class DatabaseHelper {
     await db.execute(
         "CREATE TABLE $_nombreTBL (id INTEGER PRIMARY KEY, titulo VARCHAR(50), detalle VARCHAR(100))");
     await db.execute(
-        "CREATE TABLE  user (id INTEGER PRIMARY KEY, nombre VARCHAR(50), aPaterno VARCHAR(50), aMaterno VARCHAR(50), email VARCHAR(50), telefono VARCHAR(10))");
+        "CREATE TABLE  user (id INTEGER PRIMARY KEY, nombre VARCHAR(50), aPaterno VARCHAR(50), aMaterno VARCHAR(50), email VARCHAR(50), telefono VARCHAR(10), foto VARCHAR(255))");
   }
 
   Future<int> insert(Map<String, dynamic> row, nomTabla) async {

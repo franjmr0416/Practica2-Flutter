@@ -26,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final _keyForm = GlobalKey<FormState>();
   File? imagen;
-  //UserModel? user;
+
   @override
   void initState() {
     _databaseHelper = DatabaseHelper();
@@ -65,10 +65,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               seleccionarFuente(context);
                             },
                             child: CircleAvatar(
-                                radius: 50,
-                                child: Image.network(
-                                    'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/avatar-2-1583234102.jpg') //(user.foto = null) ? Image.network(src): Image.file(File(user.foto)),
-                                ),
+                              radius: 50,
+                              child: (user?.foto == null)
+                                  ? Icon(
+                                      Icons.add_a_photo_outlined,
+                                      size: 40,
+                                    )
+                                  : Image.file(File(user!.foto!)),
+                            ),
                           ),
                         ),
                         Padding(
@@ -131,10 +135,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       controller: _controllerAPaterno,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          labelText: "Primer apellido",
-          errorText: "Este campo es obligatorio"),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        labelText: "Primer apellido",
+      ),
       onChanged: (value) {},
+      validator: (value) {
+        if (value?.isEmpty == true) {
+          return "El campo es obligatorio";
+        }
+      },
     );
   }
 
@@ -143,10 +152,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       controller: _controllerAMaterno,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          labelText: "Segundo Apellido",
-          errorText: "Este campo es obligatorio"),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        labelText: "Segundo Apellido",
+      ),
       onChanged: (value) {},
+      validator: (value) {
+        if (value?.isEmpty == true) {
+          return "El campo es obligatorio";
+        }
+      },
     );
   }
 
@@ -155,10 +169,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       controller: _controllerTelefono,
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          labelText: "Número Telefónico",
-          errorText: "Este campo es obligatorio"),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        labelText: "Número Telefónico",
+      ),
       onChanged: (value) {},
+      validator: (value) {
+        if (value?.isEmpty == true) {
+          return "El campo es obligatorio";
+        } else if (_controllerTelefono.text.length != 10) {
+          return "Telefono invalido";
+        }
+      },
     );
   }
 
@@ -167,10 +188,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       controller: _controllerEmail,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          labelText: "Email",
-          errorText: "Este campo es obligatorio"),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        labelText: "Email",
+      ),
       onChanged: (value) {},
+      validator: (value) {
+        if (value?.isEmpty == true) {
+          return "El campo es obligatorio";
+        }
+      },
     );
   }
 
@@ -184,8 +210,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               aPaterno: _controllerAPaterno.text,
               aMaterno: _controllerAMaterno.text,
               telefono: _controllerTelefono.text,
-              email: _controllerEmail.text);
-          print(user.toMap());
+              email: _controllerEmail.text,
+              foto: (oldUser?.foto == null) ? null : oldUser?.foto);
+          //print(user.toMap());
           _databaseHelper.upsert(user.toMap(), "user").then((value) {
             print(value);
             if (value > 0) {
@@ -195,28 +222,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SnackBar(content: Text('La solicitud no se completo')));
             }
           });
-          /*
-          if (widget.user == null) {
-            
-          } else {
-            UserModel user = UserModel(
-                id: widget.user!.id,
-                aPaterno: _controllerAPaterno.text,
-                aMaterno: _controllerAMaterno.text,
-                telefono: _controllerTelefono.text,
-                email: _controllerEmail.text);
-            print(user.toMap());
-            _databaseHelper.upsert(user.toMap(), "user").then((value) {
-              print(value);
-              if (value > 0) {
-                Navigator.pop(context);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('La solicitud no se completo')));
-              }
-            });
-          }
-          */
         },
         child: Text("Actualizar Información"));
   }
@@ -314,7 +319,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final name = path.basename(imagen.path);
       var ruta = path.join(directory!.path, name);
       imagen.saveTo(ruta);
-      print(ruta);
+      //print(ruta);
+      UserModel user = UserModel(
+          id: 1,
+          nombre: _controllerNombre.text,
+          aPaterno: _controllerAPaterno.text,
+          aMaterno: _controllerAMaterno.text,
+          telefono: _controllerTelefono.text,
+          email: _controllerEmail.text,
+          foto: ruta);
+
+      _databaseHelper.upsert(user.toMap(), "user");
+      setState(() {});
       return ruta;
     } on PlatformException catch (e) {
       print('Fallo al tomar imagen: $e');
