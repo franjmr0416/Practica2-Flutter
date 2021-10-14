@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:practica2/src/models/notas_model.dart';
+import 'package:practica2/src/models/tareas_model.dart';
 import 'package:practica2/src/models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
   static final _nombreBD = "NOTASBD";
-  static final _versionBD = 2;
+  static final _versionBD = 3;
   static final _nombreTBL = "tblNotas";
 
   static Database? _database;
@@ -29,6 +30,8 @@ class DatabaseHelper {
         "CREATE TABLE $_nombreTBL (id INTEGER PRIMARY KEY, titulo VARCHAR(50), detalle VARCHAR(100))");
     await db.execute(
         "CREATE TABLE  user (id INTEGER PRIMARY KEY, nombre VARCHAR(50), aPaterno VARCHAR(50), aMaterno VARCHAR(50), email VARCHAR(50), telefono VARCHAR(10), foto VARCHAR(255))");
+    await db.execute(
+        "CREATE TABLE tareas (id INTEGER PRIMARY KEY, nomTarea VARCHAR(50), dscTarea VARCHAR(150), fechaEntrega VARCHAR(30), entregada INTEGER(1))");
   }
 
   Future<int> insert(Map<String, dynamic> row, nomTabla) async {
@@ -72,5 +75,12 @@ class DatabaseHelper {
     var conexion = await database;
     var result = await conexion!.query("user");
     return result.isEmpty ? null : UserModel.fromMap(result.first);
+  }
+
+  Future<TareasModel> getTarea(int id) async {
+    var conexion = await database;
+    var result =
+        await conexion!.query("tareas", where: 'id=?', whereArgs: [id]);
+    return TareasModel.fromMap(result.first);
   }
 }

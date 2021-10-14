@@ -71,7 +71,7 @@ class _AgregarNotaScreenState extends State<AgregarNotaScreen> {
                       Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Lasolicitud no se completo')));
+                          content: Text('La solicitud no se completo')));
                     }
                   });
                 }

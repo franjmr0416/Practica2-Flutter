@@ -65,13 +65,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               seleccionarFuente(context);
                             },
                             child: CircleAvatar(
+                              backgroundColor: Colors.white,
                               radius: 50,
                               child: (user?.foto == null)
                                   ? Icon(
                                       Icons.add_a_photo_outlined,
                                       size: 40,
                                     )
-                                  : Image.file(File(user!.foto!)),
+                                  : Image.file(
+                                      File(user!.foto!),
+                                      height: 80,
+                                    ),
                             ),
                           ),
                         ),
