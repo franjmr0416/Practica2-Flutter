@@ -53,9 +53,9 @@ class DatabaseHelper {
     }
   }
 
-  Future<int> delete(int id) async {
+  Future<int> delete(int id, String tabla) async {
     var conexion = await database;
-    return await conexion!.delete(_nombreTBL, where: 'id = ?', whereArgs: [id]);
+    return await conexion!.delete(tabla, where: 'id = ?', whereArgs: [id]);
   }
 
   Future<List<NotasModel>> getAllNotes() async {
@@ -82,5 +82,19 @@ class DatabaseHelper {
     var result =
         await conexion!.query("tareas", where: 'id=?', whereArgs: [id]);
     return TareasModel.fromMap(result.first);
+  }
+
+  Future<List<TareasModel>> getAllTareasPendientes() async {
+    var conexion = await database;
+    var result =
+        await conexion!.query("tareas", where: 'entregada=?', whereArgs: [0]);
+    return result.map((tareaMap) => TareasModel.fromMap(tareaMap)).toList();
+  }
+
+  Future<List<TareasModel>> getAllTareasCompletadas() async {
+    var conexion = await database;
+    var result =
+        await conexion!.query("tareas", where: 'entregada=?', whereArgs: [1]);
+    return result.map((tareaMap) => TareasModel.fromMap(tareaMap)).toList();
   }
 }

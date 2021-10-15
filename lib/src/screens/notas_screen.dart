@@ -104,7 +104,7 @@ class _NotasScreenState extends State<NotasScreen> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                         _databaseHelper
-                                            .delete(nota.id!)
+                                            .delete(nota.id!, "tblNotas")
                                             .then((noRows) {
                                           if (noRows > 0) {
                                             ScaffoldMessenger.of(context)

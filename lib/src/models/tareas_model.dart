@@ -15,7 +15,7 @@ class TareasModel {
   //Map -> Object
   factory TareasModel.fromMap(Map<String, dynamic> map) {
     return TareasModel(
-        id: map['idTarea'],
+        id: map['id'],
         nomTarea: map['nomTarea'],
         dscTarea: map['dscTarea'],
         fechaEntrega: map['fechaEntrega'],
@@ -24,7 +24,7 @@ class TareasModel {
   //Object -> Map
   Map<String, dynamic> toMap() {
     return {
-      'idTarea': id,
+      'id': id,
       'nomTarea': nomTarea,
       'dscTarea': dscTarea,
       'fechaEntrega': fechaEntrega,
