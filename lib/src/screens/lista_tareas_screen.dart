@@ -98,8 +98,13 @@ class _ListaTareasScreenState extends State<ListaTareasScreen>
               ListTile(
                 leading: (retraso && tarea.entregada != 1) ? iconoR : iconoOK,
                 title: Text(tarea.nomTarea!),
-                subtitle: Text('Fecha de entrega: ' +
-                    tarea.fechaEntrega.toString().substring(0, 10)),
+                subtitle: (retraso && tarea.entregada != 1)
+                    ? Text(
+                        'RETRASADA fecha de entrega: ' +
+                            tarea.fechaEntrega.toString().substring(0, 10),
+                        style: TextStyle(color: Colors.red))
+                    : Text('Fecha de entrega: ' +
+                        tarea.fechaEntrega.toString().substring(0, 10)),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

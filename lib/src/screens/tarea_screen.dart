@@ -188,16 +188,21 @@ class _TareaScreenState extends State<TareaScreen> {
                 ? 0
                 : estadoSwitch); //BUG NO SE ACTUALIZA ENTREGADO
         print(tarea.toMap());
-        //insercion a la bd
-        _databaseHelper.upsert(tarea.toMap(), "tareas").then((value) {
-          print(value);
-          if (value > 0) {
-            Navigator.pop(context);
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('La solicitud no se completo')));
-          }
-        });
+        //VALIDACION
+        if (tarea.nomTarea!.isNotEmpty || tarea.dscTarea!.isNotEmpty) {
+          _databaseHelper.upsert(tarea.toMap(), "tareas").then((value) {
+            print(value);
+            if (value > 0) {
+              Navigator.pop(context);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('La solicitud no se completo')));
+            }
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('¡Ingrese todos los campos requeridos!')));
+        }
       },
       icon: Icon(Icons.save_rounded),
       label: Text('Guardar'),
