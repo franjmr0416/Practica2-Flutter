@@ -88,8 +88,26 @@ class _PopularScreenState extends State<PopularScreen>
 
   Widget _favsTab() {
     return Container(
-      child: Text('tab2'),
       color: Colors.black87,
+      child: FutureBuilder(
+          future: apiPopular!.getAllPopular(),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<PopularMoviesModel>?> snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('Hay un error en la peticion'),
+              );
+            } else {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return _listPopularMovies(snapshot.data);
+                //return Center();
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }
+          }),
     );
   }
 }

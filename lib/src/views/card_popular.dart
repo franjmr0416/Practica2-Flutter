@@ -43,18 +43,12 @@ class CardPopularView extends StatelessWidget {
                 children: [
                   Text(
                     popular.title!,
-                    style: TextStyle(color: Colors.white, fontSize: 12.0),
+                    style: TextStyle(color: Colors.amber[600], fontSize: 12.0),
                   ),
                   MaterialButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/detail',
-                          arguments:
-                              popular /*{
-                        'title': popular.title,
-                        'overview': popular.overview,
-                        'posterpath': popular.posterPath
-                      }*/
-                          );
+                          arguments: popular);
                     },
                     child: Icon(
                       Icons.chevron_right,

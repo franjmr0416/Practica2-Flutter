@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:practica2/src/screens/agregar_nota_screen.dart';
 import 'package:practica2/src/screens/intenciones_screen.dart';
+import 'package:practica2/src/screens/movies_screens/cast_screen.dart';
 import 'package:practica2/src/screens/movies_screens/detail_screen.dart';
 import 'package:practica2/src/screens/movies_screens/popular_screen.dart';
+import 'package:practica2/src/screens/movies_screens/video_screen.dart';
 import 'package:practica2/src/screens/notas_screen.dart';
 import 'package:practica2/src/screens/splash_screen.dart';
 import 'package:practica2/src/screens/opcion1_screen.dart';
@@ -29,7 +31,9 @@ class MyApp extends StatelessWidget {
         '/movie': (BuildContext context) => PopularScreen(),
         '/tareas': (BuildContext context) => ListaTareasScreen(),
         '/tarea': (BuildContext context) => TareaScreen(),
-        '/detail': (BuildContext context) => DetailScreen()
+        '/detail': (BuildContext context) => DetailScreen(),
+        '/trailer': (BuildContext context) => VideoScreen(),
+        '/casting': (BuildContext context) => CastingScreen()
       },
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),

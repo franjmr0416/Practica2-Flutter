@@ -32,6 +32,7 @@ class DatabaseHelper {
         "CREATE TABLE  user (id INTEGER PRIMARY KEY, nombre VARCHAR(50), aPaterno VARCHAR(50), aMaterno VARCHAR(50), email VARCHAR(50), telefono VARCHAR(10), foto VARCHAR(255))");
     await db.execute(
         "CREATE TABLE tareas (id INTEGER PRIMARY KEY, nomTarea VARCHAR(50), dscTarea VARCHAR(150), fechaEntrega VARCHAR(30), entregada INTEGER(1))");
+    await db.execute("CREATE TABLE favoritas (id INTEGER PRIMARY KEY)");
   }
 
   Future<int> insert(Map<String, dynamic> row, nomTabla) async {

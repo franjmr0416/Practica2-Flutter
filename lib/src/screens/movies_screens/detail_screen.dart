@@ -1,7 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:practica2/src/models/cast_movie_model.dart';
 import 'package:practica2/src/models/popular_movies_model.dart';
+import 'package:practica2/src/models/video_movie_model.dart';
+import 'package:practica2/src/network/api_popular.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:practica2/src/screens/movies_screens/cast_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({Key? key}) : super(key: key);
@@ -17,6 +22,13 @@ class _DetailScreenState extends State<DetailScreen> {
     size: 50,
     color: Colors.white70,
   );
+  ApiPopular? apiPopular;
+
+  @override
+  void initState() {
+    super.initState();
+    apiPopular = ApiPopular();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +49,59 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Column(
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.chevron_left_sharp,
+                                color: Colors.amber[600],
+                                size: 50,
+                              ),
+                              Text(
+                                'Películas',
+                                style: TextStyle(
+                                    color: Colors.amber[600],
+                                    decoration: TextDecoration.none,
+                                    fontSize: 20,
+                                    shadows: [
+                                      Shadow(
+                                          color: Colors.black54,
+                                          offset: Offset(1, 1),
+                                          blurRadius: 7.0)
+                                    ]),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(top: 25, bottom: 10),
-                        child: Image(
-                          image: NetworkImage(
-                              'https://image.tmdb.org/t/p/w500/${movie.posterPath}'),
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Container(
                           width: 200,
+                          height: 300,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://image.tmdb.org/t/p/w500/${movie.posterPath}')),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black87,
+                                    offset: Offset(3, 3),
+                                    blurRadius: 10)
+                              ],
+                              borderRadius: BorderRadius.circular(10)),
                         ),
                       )
                     ],
@@ -55,22 +112,35 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Container(
                         //Fondo informacion
-                        color: Colors.black54,
+
+                        decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
                         child: Column(
                           children: [
                             Row(children: [
                               Padding(
                                 padding: EdgeInsets.only(
-                                    bottom: 10, left: 10, right: 0, top: 10),
+                                    bottom: 20, left: 10, right: 0, top: 20),
                                 child: Container(
                                   width: 300,
                                   child: Text(
                                     movie.title.toString(),
                                     style: TextStyle(
-                                      fontSize: 20,
-                                      decoration: TextDecoration.none,
-                                      color: Colors.amber[600],
-                                    ),
+                                        fontSize: 22,
+                                        decoration: TextDecoration.none,
+                                        color: Colors.white,
+                                        shadows: [
+                                          Shadow(
+                                              color: Colors.amber,
+                                              offset: Offset(2, 3),
+                                              blurRadius: 10),
+                                          Shadow(
+                                              color: Colors.black87,
+                                              offset: Offset(3, 4),
+                                              blurRadius: 10)
+                                        ]),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 3,
                                   ),
@@ -89,23 +159,52 @@ class _DetailScreenState extends State<DetailScreen> {
                                 ElevatedButton.icon(
                                   onPressed: () {
                                     print("ver trailer");
+                                    Navigator.pushNamed(context, '/trailer',
+                                        arguments: movie);
                                   },
-                                  icon: Icon(Icons.play_circle_outline),
-                                  label: Text('Ver Trailer'),
+                                  icon: Icon(
+                                    Icons.play_circle_outline,
+                                    color: Colors.black,
+                                  ),
+                                  label: Text(
+                                    'Ver Trailer',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                   style: ElevatedButton.styleFrom(
-                                      primary: Colors.black54),
+                                      primary: Colors.amber[600]),
                                 ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, '/casting',
+                                          arguments: movie);
+                                    },
+                                    icon: Icon(
+                                      Icons.people,
+                                      color: Colors.black,
+                                    ),
+                                    label: Text('Ver Reparto',
+                                        style: TextStyle(color: Colors.black)),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.amber[600],
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Descripción:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    decoration: TextDecoration.none,
-                                    color: Colors.white,
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Text(
+                                    'Descripción:',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      decoration: TextDecoration.none,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 )
                               ],
@@ -118,50 +217,22 @@ class _DetailScreenState extends State<DetailScreen> {
                                         EdgeInsets.only(top: 10, bottom: 10),
                                     child: SizedBox(
                                       child: Text(
-                                        movie.overview.toString(),
+                                        (movie.overview!.length != 0)
+                                            ? movie.overview.toString()
+                                            : 'Sin descripción',
+                                        textAlign: TextAlign.justify,
                                         overflow: TextOverflow.ellipsis,
-                                        maxLines: 7,
+                                        maxLines: 15,
                                         style: TextStyle(
-                                            fontSize: 12,
-                                            decoration: TextDecoration.none,
-                                            color: Colors.white70),
+                                          fontSize: 12,
+                                          decoration: TextDecoration.none,
+                                          color: Colors.white70,
+                                        ),
                                       ),
                                       width: 300,
                                     ),
                                   )
                                 ]),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Reparto:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    decoration: TextDecoration.none,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
-                            /*Row(
-                              children: [
-                                Container(
-                                  child: ListView(
-                                    //scrollDirection: Axis.horizontal,
-                                    children: [
-                                      Container(
-                                        width: 160.0,
-                                        color: Colors.red,
-                                      ),
-                                      Container(
-                                        width: 160.0,
-                                        color: Colors.blue,
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )*/
                           ],
                         ),
                       )
@@ -176,20 +247,43 @@ class _DetailScreenState extends State<DetailScreen> {
 
   void _evalLike() {
     if (like) {
-      like = false;
-      btnLike = Icon(
-        Icons.favorite,
-        color: Colors.red,
-        size: 50,
-      );
-    } else {
-      like = true;
       btnLike = Icon(
         Icons.favorite_border_outlined,
         color: Colors.white70,
         size: 50,
       );
+      like = false;
+    } else {
+      btnLike = Icon(
+        Icons.favorite,
+        color: Colors.red,
+        size: 50,
+      );
+      like = true;
     }
     setState(() {});
+  }
+
+  Widget _artistaImg(nombre) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.network(
+          'https://pics.filmaffinity.com/Venom-233440429-large.jpg',
+          width: 60,
+        ),
+        Text('Nombre',
+            style: TextStyle(
+              fontSize: 12,
+              decoration: TextDecoration.none,
+              color: Colors.white,
+            )),
+        Text('Personaje',
+            style: TextStyle(
+                fontSize: 12,
+                decoration: TextDecoration.none,
+                color: Colors.white)),
+      ],
+    );
   }
 }
