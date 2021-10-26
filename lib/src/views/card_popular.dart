@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:practica2/src/models/popular_movies_model.dart';
 
@@ -10,27 +11,37 @@ class CardPopularView extends StatelessWidget {
     return Container(
       color: Colors.black87,
       padding: EdgeInsets.only(top: 10.0, left: 7, right: 7, bottom: 10.0),
-      /*decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black87,
-                offset: Offset(0.0, 5.0),
-                blurRadius: 2.5)
-          ]),*/
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
         child: Stack(alignment: Alignment.bottomCenter, children: [
           Hero(
             tag: popular.id.toString(),
             child: Container(
-              child: FadeInImage(
-                placeholder: AssetImage('assets/activity_indicator.gif'),
-                image: NetworkImage(
-                    'https://image.tmdb.org/t/p/w500/${popular.backdropPath}'),
-                fadeInDuration: Duration(milliseconds: 200),
+                child: /*CachedNetworkImage(
+              imageUrl:
+                  'https://image.tmdb.org/t/p/w500${popular.backdropPath}',
+              imageBuilder: (context, imageProvider) => Container(
+                width: 300,
+                //height: 300,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.amber, width: 5),
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover)),
               ),
-            ),
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Container(
+                child: Icon(
+                  Icons.error,
+                  color: Colors.white70,
+                ),
+              ),
+            )*/
+                    Image(
+              image: NetworkImage(
+                  'https://image.tmdb.org/t/p/w500/${popular.backdropPath}'),
+              //fadeInDuration: Duration(milliseconds: 400)
+            )),
           ),
           Opacity(
             opacity: .5,

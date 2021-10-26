@@ -1,7 +1,10 @@
+// ignore_for_file: unnecessary_statements
+
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:practica2/src/models/notas_model.dart';
+import 'package:practica2/src/models/popular_movies_model.dart';
 import 'package:practica2/src/models/tareas_model.dart';
 import 'package:practica2/src/models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -32,7 +35,8 @@ class DatabaseHelper {
         "CREATE TABLE  user (id INTEGER PRIMARY KEY, nombre VARCHAR(50), aPaterno VARCHAR(50), aMaterno VARCHAR(50), email VARCHAR(50), telefono VARCHAR(10), foto VARCHAR(255))");
     await db.execute(
         "CREATE TABLE tareas (id INTEGER PRIMARY KEY, nomTarea VARCHAR(50), dscTarea VARCHAR(150), fechaEntrega VARCHAR(30), entregada INTEGER(1))");
-    await db.execute("CREATE TABLE favoritas (id INTEGER PRIMARY KEY)");
+    await db.execute(
+        "CREATE TABLE favoritas (id INTEGER PRIMARY KEY, backdrop_path TEXT, original_language TEXT, original_title TEXT, overview TEXT, popularity REAL, poster_path TEXT, release_date TEXT, title TEXT, vote_average REAL, vote_count INTEGER);");
   }
 
   Future<int> insert(Map<String, dynamic> row, nomTabla) async {
@@ -97,5 +101,26 @@ class DatabaseHelper {
     var result =
         await conexion!.query("tareas", where: 'entregada=?', whereArgs: [1]);
     return result.map((tareaMap) => TareasModel.fromMap(tareaMap)).toList();
+  }
+
+  Future<List<PopularMoviesModel>> getAllFavs() async {
+    var conexion = await database;
+    var result = await conexion!.query("favoritas");
+    return result.map((favMap) => PopularMoviesModel.fromMap(favMap)).toList();
+  }
+
+  Future<bool> checkFavsById(int id) async {
+    var conexion = await database;
+    var result =
+        await conexion!.query("favoritas", where: 'id=?', whereArgs: [id]);
+    //print(result.length);
+    if (result.length > 0) {
+      print('fav');
+      return true;
+    } else {
+      print('no fav');
+      return false;
+    }
+    //return result.map((favMap) => PopularMoviesModel.fromMap(favMap)).toList();
   }
 }

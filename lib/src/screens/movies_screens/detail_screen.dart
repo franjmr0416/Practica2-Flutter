@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:practica2/src/database/database_helper.dart';
 import 'package:practica2/src/models/cast_movie_model.dart';
 import 'package:practica2/src/models/popular_movies_model.dart';
 import 'package:practica2/src/models/video_movie_model.dart';
@@ -17,17 +18,16 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   bool like = false;
-  Icon btnLike = Icon(
-    Icons.favorite_border,
-    size: 50,
-    color: Colors.white70,
-  );
+
   ApiPopular? apiPopular;
+  late DatabaseHelper _databaseHelper;
+  PopularMoviesModel? popularMoviesModel;
 
   @override
   void initState() {
     super.initState();
     apiPopular = ApiPopular();
+    _databaseHelper = DatabaseHelper();
   }
 
   @override
@@ -149,8 +149,14 @@ class _DetailScreenState extends State<DetailScreen> {
                               Padding(
                                 padding: EdgeInsets.only(right: 7),
                                 child: GestureDetector(
-                                  child: btnLike,
-                                  onTap: () => _evalLike(),
+                                  child: FutureBuilder(
+                                      future: _databaseHelper
+                                          .checkFavsById(movie.id!)
+                                          .then((value) => like = value),
+                                      builder: (BuildContext context, bool) {
+                                        return _likeBtn();
+                                      }),
+                                  onTap: () => _evalLike(movie),
                                 ),
                               )
                             ]),
@@ -245,45 +251,33 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  void _evalLike() {
+  _evalLike(PopularMoviesModel movie) {
     if (like) {
-      btnLike = Icon(
+      _databaseHelper
+          .delete(movie.id!, 'favoritas')
+          .then((value) => like = false);
+    } else {
+      _databaseHelper
+          .insert(movie.toMap(), 'favoritas')
+          .then((value) => like = true);
+    }
+
+    setState(() {});
+  }
+
+  Widget _likeBtn() {
+    if (!like) {
+      return Icon(
         Icons.favorite_border_outlined,
         color: Colors.white70,
         size: 50,
       );
-      like = false;
     } else {
-      btnLike = Icon(
+      return Icon(
         Icons.favorite,
         color: Colors.red,
         size: 50,
       );
-      like = true;
     }
-    setState(() {});
-  }
-
-  Widget _artistaImg(nombre) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.network(
-          'https://pics.filmaffinity.com/Venom-233440429-large.jpg',
-          width: 60,
-        ),
-        Text('Nombre',
-            style: TextStyle(
-              fontSize: 12,
-              decoration: TextDecoration.none,
-              color: Colors.white,
-            )),
-        Text('Personaje',
-            style: TextStyle(
-                fontSize: 12,
-                decoration: TextDecoration.none,
-                color: Colors.white)),
-      ],
-    );
   }
 }

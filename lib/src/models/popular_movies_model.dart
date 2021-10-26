@@ -26,7 +26,7 @@ class PopularMoviesModel {
     this.voteAverage,
     this.voteCount,
   });
-
+//Map -> Object
   factory PopularMoviesModel.fromMap(Map<String, dynamic> map) {
     return PopularMoviesModel(
         backdropPath: map['backdrop_path'] ?? "",
@@ -42,5 +42,21 @@ class PopularMoviesModel {
             ? (map['vote_average'] as int).toDouble()
             : map['vote_average'],
         voteCount: map['vote_count']);
+  }
+  //Object -> Map
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'backdrop_path': backdropPath,
+      'original_language': originalLanguage,
+      'original_title': originalTitle,
+      'overview': overview,
+      'popularity': popularity,
+      'poster_path': posterPath,
+      'release_date': releaseDate,
+      'title': title,
+      'vote_average': voteAverage,
+      'vote_count': voteCount
+    };
   }
 }

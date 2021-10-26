@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:practica2/src/database/database_helper.dart';
 import 'package:practica2/src/models/popular_movies_model.dart';
 import 'package:practica2/src/network/api_popular.dart';
 import 'package:practica2/src/views/card_popular.dart';
@@ -15,11 +16,14 @@ class _PopularScreenState extends State<PopularScreen>
     with TickerProviderStateMixin {
   late TabController _tabControlador;
   ApiPopular? apiPopular;
+  late DatabaseHelper _databaseHelper;
+  PopularMoviesModel? popularMoviesModel;
 
   @override
   void initState() {
     super.initState();
     apiPopular = ApiPopular();
+    _databaseHelper = DatabaseHelper();
     _tabControlador = TabController(length: 2, vsync: this);
   }
 
@@ -90,7 +94,7 @@ class _PopularScreenState extends State<PopularScreen>
     return Container(
       color: Colors.black87,
       child: FutureBuilder(
-          future: apiPopular!.getAllPopular(),
+          future: _databaseHelper.getAllFavs(),
           builder: (BuildContext context,
               AsyncSnapshot<List<PopularMoviesModel>?> snapshot) {
             if (snapshot.hasError) {
@@ -99,8 +103,27 @@ class _PopularScreenState extends State<PopularScreen>
               );
             } else {
               if (snapshot.connectionState == ConnectionState.done) {
-                return _listPopularMovies(snapshot.data);
-                //return Center();
+                if (snapshot.data!.isNotEmpty) {
+                  return _listPopularMovies(snapshot.data);
+                } else {
+                  return Center(
+                      child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 20, bottom: 5),
+                        child: Icon(
+                          Icons.error_outline_rounded,
+                          color: Colors.amber,
+                          size: 50,
+                        ),
+                      ),
+                      Text(
+                        'Aún no tienes favoritos!',
+                        style: TextStyle(color: Colors.amber, fontSize: 20),
+                      )
+                    ],
+                  ));
+                }
               } else {
                 return Center(
                   child: CircularProgressIndicator(),

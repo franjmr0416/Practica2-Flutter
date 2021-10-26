@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:practica2/src/models/popular_movies_model.dart';
 import 'package:practica2/src/models/video_movie_model.dart';
 import 'package:practica2/src/network/api_popular.dart';
-import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoScreen extends StatefulWidget {
   VideoScreen({Key? key}) : super(key: key);
@@ -13,7 +13,8 @@ class VideoScreen extends StatefulWidget {
 
 class _VideoScreenState extends State<VideoScreen> {
   ApiPopular? apiPopular;
-  late VideoPlayerController _videoPlayerController;
+
+  late YoutubePlayerController _controller;
 
   @override
   void initState() {
@@ -53,7 +54,7 @@ class _VideoScreenState extends State<VideoScreen> {
         } else {
           if (snapshot.connectionState == ConnectionState.done) {
             //print(snapshot.data);
-            return Text(snapshot.data![0].key.toString());
+            return _videoPlayer(snapshot.data![0].key.toString());
           } else {
             return Center(
               child: CircularProgressIndicator(),
@@ -61,6 +62,17 @@ class _VideoScreenState extends State<VideoScreen> {
           }
         }
       },
+    );
+  }
+
+  Widget _videoPlayer(id) {
+    _controller = YoutubePlayerController(initialVideoId: id);
+
+    return Center(
+      child: YoutubePlayer(
+        controller: _controller,
+        progressColors: ProgressBarColors(playedColor: Colors.amber),
+      ),
     );
   }
 }
